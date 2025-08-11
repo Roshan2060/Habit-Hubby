@@ -51,7 +51,7 @@ const Login = () => {
 
     try {
       // response.credential contains the Google ID token
-      const res = await fetch("http://127.0.0.1:8000/api/auth/google/", {
+      const res = await fetch("https://habit-hubby-2.onrender.com/api/auth/google/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +93,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/token/", {
+      const response = await fetch("https://habit-hubby-2.onrender.com/api/token/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +108,7 @@ const Login = () => {
         localStorage.setItem("refreshToken", data.refresh);
 
         // Fetch user profile
-        const profileRes = await fetch("http://127.0.0.1:8000/api/me/", {
+        const profileRes = await fetch("https://habit-hubby-2.onrender.com/api/me/", {
           headers: {
             Authorization: `Bearer ${data.access}`,
             "Content-Type": "application/json",

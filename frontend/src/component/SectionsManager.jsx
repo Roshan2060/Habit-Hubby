@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/api/sections/";
+const API_URL = "https://habit-hubby-2.onrender.com/api/sections/";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem("accessToken");

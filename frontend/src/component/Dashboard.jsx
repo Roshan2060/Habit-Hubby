@@ -7,7 +7,7 @@ import Calendar from "./Calendar";
 import ProgressChart from "./ProgressChart";
 import SectionsManager from "./SectionsManager"; // <-- Use the updated SectionsManager here
 
-const API_URL = "http://127.0.0.1:8000/api/tasks/";
+const API_URL = "https://habit-hubby-2.onrender.com/api/tasks/";
 
 // Helper to get auth headers with Bearer token
 const getAuthHeaders = () => {

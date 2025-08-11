@@ -1,7 +1,7 @@
 // src/api.js
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000/api/v1';
+const BASE_URL = 'https://habit-hubby-2.onrender.com/api/v1';
 const api = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,

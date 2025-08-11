@@ -32,7 +32,7 @@ export default function TaskInput({ sectionId, onTaskAdded }) {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/tasks/", {
+      const response = await fetch("https://habit-hubby-2.onrender.com/api/tasks/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
