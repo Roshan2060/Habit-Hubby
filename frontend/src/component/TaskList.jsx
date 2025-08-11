@@ -7,7 +7,7 @@ export default function TaskList({ tasks, onToggleComplete, onDelete }) {
       <ul className="max-h-[350px] overflow-y-auto">
         {tasks.length === 0 && <p className="text-gray-500">No tasks found.</p>}
 
-        {tasks.map(task => (
+        {tasks.map((task) => (
           <li
             key={task.id}
             className="flex justify-between items-center border-b border-teal-100 py-2"
@@ -41,4 +41,3 @@ export default function TaskList({ tasks, onToggleComplete, onDelete }) {
     </>
   );
 }
-

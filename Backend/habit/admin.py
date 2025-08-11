@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from .models import User,Task
+from .models import User, Section, Task
+
+
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     model = User
@@ -25,9 +27,15 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
+@admin.register(Section)
+class SectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user')
+    search_fields = ('title', 'user__email')
+    list_filter = ('user',)
+
+
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ('name', 'date', 'completed')   # Columns shown in admin list
-    list_filter = ('completed', 'date')            # Filters in sidebar
-    search_fields = ('name',)                       # Search bar fields
-    ordering = ('date',)
+    list_display = ('name', 'section', 'date', 'completed')
+    list_filter = ('completed', 'date', 'section')
+    search_fields = ('name', 'section__title', 'section__user__email')

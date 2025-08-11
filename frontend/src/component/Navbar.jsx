@@ -1,10 +1,13 @@
 import { Link, NavLink } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userPanelOpen, setUserPanelOpen] = useState(false);
+  const userPanelRef = useRef(null);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -16,25 +19,43 @@ const Navbar = () => {
   const activeClass = "text-teal-500 font-bold";
   const inactiveClass = "text-gray-700 hover:text-teal-600";
 
-  // Check localStorage for username on mount
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     const storedUsername = localStorage.getItem("username");
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
+    setIsLoggedIn(!!token);
+    setUsername(storedUsername || "");
   }, []);
 
-  // Logout handler
+  // Close dropdown if clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (userPanelRef.current && !userPanelRef.current.contains(event.target)) {
+        setUserPanelOpen(false);
+      }
+    }
+    if (userPanelOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [userPanelOpen]);
+
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("username");
+    setIsLoggedIn(false);
     setUsername("");
-    window.location.href = "/login"; // Redirect to login page
+    setUserPanelOpen(false);
+    window.location.href = "/login";
   };
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center relative">
         {/* Logo */}
         <Link to="/" className="text-2xl font-extrabold text-teal-600">
           Habit Hubby
@@ -54,16 +75,31 @@ const Navbar = () => {
             </NavLink>
           ))}
 
-          {username ? (
-            <>
-              <span className="text-teal-800 font-medium">Welcome, {username}</span>
+          {isLoggedIn ? (
+            <div className="relative" ref={userPanelRef}>
               <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+                onClick={() => setUserPanelOpen(!userPanelOpen)}
+                className="text-teal-800 font-medium focus:outline-none"
+                aria-haspopup="true"
+                aria-expanded={userPanelOpen}
               >
-                Logout
+                {username}
               </button>
-            </>
+
+              {userPanelOpen && (
+                <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded shadow-lg p-4 z-50">
+                  <h3 className="font-semibold mb-2">Your Habit Stats</h3>
+                  <p>Here you can show user-specific info, progress charts, etc.</p>
+                  {/* You can import and use your ProgressChart component here */}
+                  <button
+                    onClick={handleLogout}
+                    className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               to="/login"
@@ -100,18 +136,30 @@ const Navbar = () => {
             </NavLink>
           ))}
 
-          {username ? (
+          {isLoggedIn ? (
             <>
-              <span className="text-teal-800 font-medium">Welcome, {username}</span>
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-                className="bg-red-500 text-white text-center px-4 py-2 rounded-lg hover:bg-red-600 transition"
+              <span
+                className="text-teal-800 font-medium cursor-pointer"
+                onClick={() => setUserPanelOpen(!userPanelOpen)}
               >
-                Logout
-              </button>
+               {username}
+              </span>
+
+              {userPanelOpen && (
+                <div className="bg-white border border-gray-300 rounded shadow-lg p-4 mt-2">
+                  <h3 className="font-semibold mb-2">Your Habit Stats</h3>
+                  <p>Here you can show user-specific info, progress charts, etc.</p>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                    className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </>
           ) : (
             <Link
