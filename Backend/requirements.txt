@@ -9,6 +9,7 @@ djangorestframework==3.16.0
 djangorestframework-simplejwt==5.5.1
 drf-yasg==1.21.10
 google-auth==2.40.3
+gunicorn==23.0.0
 idna==3.10
 inflection==0.5.1
 packaging==25.0
