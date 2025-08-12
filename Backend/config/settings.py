@@ -116,9 +116,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-ALLOWED_HOSTS = [
-    "habit-hubby-2.onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='').split(',')
